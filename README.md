@@ -1,4 +1,4 @@
-<img width="2539" height="1466" alt="image" src="https://github.com/user-attachments/assets/7cb8a133-1d53-42d7-8465-e672bc3a0074" /># AI Food Recommender
+# AI Food Recommender
 
 An intelligent food ordering and recommendation system built with Python, Flask, and Scikit-learn. This application provides personalized restaurant suggestions based on user preferences and implements a complete user authentication system with a MySQL database.
 
@@ -37,7 +37,7 @@ An intelligent food ordering and recommendation system built with Python, Flask,
 
 Follow these steps to get the project running on your local machine.
 
-### 1. Prerequisites
+# 1. Prerequisites
 
 -   Python 3.8+
 -   MySQL Server and MySQL Workbench
