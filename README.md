@@ -43,4 +43,3 @@ Follow these steps to get the project running on your local machine.
 -   MySQL Server and MySQL Workbench
 -   Git
 
-# 2. Clone the Repository
