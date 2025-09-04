@@ -1,4 +1,4 @@
-# AI Food Recommender
+# AI Restaurant Recommender
 
 An intelligent food ordering and recommendation system built with Python, Flask, and Scikit-learn. This application provides personalized restaurant suggestions based on user preferences and implements a complete user authentication system with a MySQL database.
 
