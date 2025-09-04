@@ -1,4 +1,4 @@
-# data_preprocessing.py (Corrected for Encoding Error)
+# data_processing.py (Simplified to remove dish logic)
 
 import pandas as pd
 import numpy as np
@@ -8,17 +8,12 @@ print("--- Starting Data Preprocessing ---")
 # 1. Load Datasets
 try:
     df_meta = pd.read_csv('Restaurant names and Metadata.csv')
-
-    # ---> THE FIX IS HERE <---
-    # We specify the encoding to prevent UnicodeDecodeError
     df_reviews = pd.read_csv('Restaurant reviews.csv', encoding='latin-1')
-
     print("✅ Datasets loaded successfully!")
 except FileNotFoundError:
     print("❌ Error: Make sure dataset files are in the directory.")
     exit()
 
-# (The rest of the script is the same)
 # 2. Process Reviews Data
 df_reviews.rename(columns={'Restaurant': 'Name'}, inplace=True)
 df_reviews['Rating_Num'] = pd.to_numeric(df_reviews['Rating'], errors='coerce')
@@ -41,8 +36,9 @@ df_final.dropna(subset=['avg_rating'], inplace=True)
 print("✅ Datasets merged.")
 
 # 5. Feature Engineering
+# Simplified 'tags' feature without dishes
 df_final['tags'] = df_final['Cuisines'] + ' ' + df_final['Collections']
-print("✅ 'tags' feature created.")
+print("✅ 'tags' feature created from Cuisines and Collections.")
 
 # 6. Save Final Cleaned Data
 output_columns = [
@@ -54,3 +50,4 @@ df_final.to_csv('restaurants_cleaned.csv', index=False)
 
 print("\n--- Data Preprocessing Complete ---")
 print("🎉 Final cleaned data saved to 'restaurants_cleaned.csv'")
+

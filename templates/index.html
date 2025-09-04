@@ -6,42 +6,152 @@
     <title>AI Food Recommender</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #cde3fbff; }
-        .jumbotron {
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-            padding: 2.5rem;
-            border-radius: 20px;
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body { 
+            background-color: #f8f9fc;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23e9e9ed' fill-opacity='0.4'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h4v-9H0v-1h4v-9H0v-1h4v-9H0v-1h4v-9H0v-1h4v-9H0v-1h4v-9H0v-1h4v-9H0v-1h4v-9H0v-1h5v1h9v-1h1v1h9v-1h1v1h9v-1h1v1h9v-1h1v1h9v-1h1v1h9v-1h1v1h9v-1h1v1h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zM85 86v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zM75 76v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zM65 66v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zM55 56v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zM45 46v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zM35 36v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zM25 26v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zM15 16v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            font-family: 'Poppins', sans-serif;
+        }
+        .navbar-brand {
+            font-weight: 600;
+        }
+        .header-jumbotron {
+            background: linear-gradient(135deg, #6a82fb, #fc5c7d);
+            padding: 4rem 3rem;
+            border-radius: 24px;
             color: #fff;
+            margin-top: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .header-jumbotron::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        .header-jumbotron h1 {
+            font-weight: 700;
+        }
+        .search-container {
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+            margin-top: -3rem;
+            position: relative;
+            z-index: 10;
+        }
+        .form-control-lg {
+            border-radius: 12px;
+        }
+        .btn-primary {
+            background-color: #6a82fb;
+            border-color: #6a82fb;
+            padding: 0.8rem;
+            font-weight: 500;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #556ee6;
+            border-color: #556ee6;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(106, 130, 251, 0.3);
         }
         .card {
-            border-radius: 20px;
-            transition: transform 0.2s;
+            border-radius: 18px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease-in-out;
+            background: #fff;
+            opacity: 0;
+            animation: slideInUp 0.6s ease-out forwards;
         }
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+            border-color: #6a82fb;
+        }
+        .card-title a {
+            font-weight: 600;
+            color: #333;
+        }
+        .card-title a:hover {
+            color: #6a82fb;
         }
         .badge-cost {
             font-size: 0.9rem;
-            background: #ffc107;
-            color: #000;
+            background: #ffeb99;
+            color: #664d03;
+            font-weight: 500;
+            padding: 0.4em 0.7em;
+            border-radius: 8px;
         }
-        .rating-stars {
-            color: #ffcc00;
+        .rating-stars { 
+            color: #ffc107; 
+        }
+        .proactive-section, .recommendations-section {
+            background-color: transparent;
+            padding: 2.5rem 0;
+            border-radius: 24px;
+            margin-bottom: 2rem;
+        }
+        .recommendation-reason {
+            font-size: 0.85rem;
+            color: #555;
+            background-color: #f0f2f5;
+            padding: 0.5rem 0.8rem;
+            border-radius: 10px;
+            margin-top: 0.75rem;
+        }
+        .section-title {
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(135deg, #6a82fb, #fc5c7d);
+            border-radius: 2px;
         }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container my-4">
 
         <nav class="navbar navbar-expand-lg navbar-light bg-white mb-4 shadow-sm" style="border-radius: 15px;">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/"><strong>Food Recommender(Software Eng project)</strong></a>
-                <div class="d-flex">
+                <a class="navbar-brand" href="/"><strong><i class="fas fa-utensils me-2 text-primary"></i>Food Recommender</strong></a>
+                <div class="d-flex align-items-center">
                     {% if current_user.is_authenticated %}
                         <span class="navbar-text me-3">Welcome, {{ current_user.username }}!</span>
-                        <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">Logout</a>
+                        <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm">Logout</a>
                     {% else %}
                         <a href="{{ url_for('login') }}" class="btn btn-outline-primary me-2">Login</a>
                         <a href="{{ url_for('register') }}" class="btn btn-primary">Register</a>
@@ -49,65 +159,93 @@
                 </div>
             </div>
         </nav>
+        
+        {% if proactive_recs %}
+        <div class="proactive-section">
+            <h2 class="text-center section-title">Just For You ✨</h2>
+            <div class="row g-4 recommendation-grid">
+                {% for r in proactive_recs %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">
+                                <a href="{{ r.Links }}" target="_blank" class="text-decoration-none">{{ r.Name }}</a>
+                            </h5>
+                            <p class="card-text text-muted small">{{ r.Cuisines }}</p>
+                            <p class="recommendation-reason">💡 {{ r.reason }}</p>
+                            <div class="mt-auto pt-3">
+                                <span class="badge badge-cost">₹ {{ r.Cost|int }}</span>
+                                <div class="mt-2">
+                                    <span class="rating-stars">
+                                        {% for i in range((r.avg_rating|round(0,'floor'))|int) %}⭐{% endfor %}
+                                    </span>
+                                    <small class="text-muted ms-1">({{ r.avg_rating }} • {{ r.review_count }} reviews)</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
 
-        <div class="jumbotron text-center shadow-sm animate__animated animate__fadeInDown">
-            <h1 class="display-5">Food Recommender</h1>
-            <p class="lead">Tell us what your craving or choose a restaurant, we'll do the rest!</p>
+        <div class="header-jumbotron text-center animate__animated animate__fadeInDown">
+            <h1 class="display-5">Discover Your Next Favorite Meal</h1>
+            <p class="lead">Tell us what you're craving, and we'll do the rest!</p>
         </div>
 
-        <form method="POST" action="/" class="mt-4 animate__animated animate__fadeInUp">
-            <div class="form-group mb-3">
-                <label for="taste_query" class="form-label"><strong>What are you craving?</strong></label>
-                <input type="text" name="taste_query" id="taste_query" class="form-control form-control-lg"
-                       placeholder="e.g., spicy biryani, Italian pasta, sweet desserts...">
-            </div>
-
-            <div class="text-center my-3"> or </div>
-
-            <div class="form-group">
-                <label for="restaurant_name" class="form-label"><strong>Pick a restaurant you like:</strong></label>
-                <input list="restaurants" name="restaurant_name" id="restaurant_name" 
-                       class="form-control form-control-lg" placeholder="Type or select...">
-                <datalist id="restaurants">
-                    {% for restaurant in all_restaurants %}
-                        <option value="{{ restaurant }}">
-                    {% endfor %}
-                </datalist>
-            </div>
-
-            <div class="d-grid gap-2 mt-3">
-                <button type="submit" class="btn btn-primary btn-lg animate__animated animate__pulse animate__infinite">
-                    Find Recommendations!
-                </button>
-            </div>
-        </form>
+        <div class="search-container animate__animated animate__fadeInUp">
+            <form method="POST" action="/">
+                <div class="form-group mb-3">
+                    <label for="taste_query" class="form-label"><strong>What are you craving?</strong></label>
+                    <input type="text" name="taste_query" id="taste_query" class="form-control form-control-lg"
+                           placeholder="e.g., spicy biryani, Italian pasta, sweet desserts...">
+                </div>
+                <div class="text-center my-3 text-muted"> or </div>
+                <div class="form-group">
+                    <label for="restaurant_name" class="form-label"><strong>Pick a restaurant you like:</strong></label>
+                    <input list="restaurants" name="restaurant_name" id="restaurant_name" 
+                           class="form-control form-control-lg" placeholder="Type or select...">
+                    <datalist id="restaurants">
+                        {% for restaurant in all_restaurants %}
+                            <option value="{{ restaurant }}">
+                        {% endfor %}
+                    </datalist>
+                </div>
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-search me-2"></i>Find Recommendations!
+                    </button>
+                </div>
+            </form>
+        </div>
 
         {% if error %}
             <div class="alert alert-danger mt-4 animate__animated animate__shakeX" role="alert">{{ error }}</div>
         {% endif %}
 
         {% if recommendations %}
-        <div class="mt-5 animate__animated animate__fadeIn">
-            <h2 class="mb-4 text-center">✨ Top Recommendations For You ✨</h2>
-            <div class="row g-4">
+        <div class="recommendations-section mt-4">
+            <h2 class="mb-4 text-center section-title">✨ Top Recommendations ✨</h2>
+            <div class="row g-4 recommendation-grid">
                 {% for r in recommendations %}
                 <div class="col-md-6 col-lg-4">
-                    <div class="card shadow-sm h-100">
-                        <div class="card-body">
+                    <div class="card h-100">
+                        <div class="card-body d-flex flex-column"> 
                             <h5 class="card-title">
-                                <a href="{{ r.Links }}" target="_blank" class="text-decoration-none text-dark">
-                                    {{ r.Name }}
-                                </a>
+                                <a href="{{ r.Links }}" target="_blank" class="text-decoration-none">{{ r.Name }}</a>
                             </h5>
-                            <p class="card-text text-muted">{{ r.Cuisines }}</p>
-                            <span class="badge badge-cost">₹ {{ r.Cost|int }}</span>
-                            <div class="mt-2">
-                                <span class="rating-stars">
-                                    {% for i in range((r.avg_rating|round(0,'floor'))|int) %}
-                                        ⭐
-                                    {% endfor %}
-                                </span>
-                                <small>({{ r.avg_rating }} • {{ r.review_count }} reviews)</small>
+                            <p class="card-text text-muted small">{{ r.Cuisines }}</p>
+                            <p class="recommendation-reason">💡 {{ r.reason }}</p>
+                            <div class="mt-auto pt-3">
+                                <span class="badge badge-cost">₹ {{ r.Cost|int }}</span>
+                                <div class="mt-2">
+                                    <span class="rating-stars">
+                                        {% for i in range((r.avg_rating|round(0,'floor'))|int) %}⭐{% endfor %}
+                                    </span>
+                                    <small class="text-muted ms-1">({{ r.avg_rating }} • {{ r.review_count }} reviews)</small>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -117,5 +255,15 @@
         </div>
         {% endif %}
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedCards = document.querySelectorAll('.recommendation-grid .card');
+            animatedCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 100}ms`;
+            });
+        });
+    </script>
 </body>
 </html>
+

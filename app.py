@@ -1,7 +1,7 @@
-# app.py (Complete and Final Version)
+# app.py (Updated with Proactive Recs, Reasons, and Dish Matching)
 
 # 1. Imports
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -19,7 +19,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # 3. Extensions Initialization
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
-login_manager.login_view = 'login' # This is crucial for @login_required
+login_manager.login_view = 'login'
 
 # 4. Database Models
 class User(UserMixin, db.Model):
@@ -42,6 +42,13 @@ def load_user(user_id):
 try:
     df = pd.read_csv('restaurants_cleaned.csv')
     df['name_for_matching'] = df['Name'].str.lower().str.strip()
+    
+    ### NEW FEATURE ###
+    # Ensure 'Popular Dishes' column exists and is filled with strings
+    if 'Popular Dishes' not in df.columns:
+        df['Popular Dishes'] = ''
+    df['Popular Dishes'] = df['Popular Dishes'].fillna('')
+
     tfidf = TfidfVectorizer(stop_words='english')
     tfidf_matrix = tfidf.fit_transform(df['tags'].fillna(''))
     cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
@@ -52,13 +59,29 @@ except FileNotFoundError:
     df = None
     print("CRITICAL: 'restaurants_cleaned.csv' not found. Recommendations will not work.")
 
-# 7. AI Helper Functions
+# 7. AI Helper Functions (Updated to return structured data)
+
+### NEW FEATURE ###
 def get_recommendations_from_text(user_input):
     user_vec = tfidf.transform([user_input])
     sim_scores = cosine_similarity(user_vec, tfidf_matrix).flatten()
     sim_indices = sim_scores.argsort()[-10:][::-1]
-    return df.iloc[sim_indices]
+    
+    recs_df = df.iloc[sim_indices]
+    recommendations = recs_df.to_dict('records')
+    
+    # Add reason and dish matching
+    for rec in recommendations:
+        rec['reason'] = f"Matches your craving for '{user_input}'"
+        # Check if the craving text appears in the popular dishes for that restaurant
+        if user_input.lower() in str(rec.get('Popular Dishes', '')).lower():
+            rec['matched_dish'] = user_input
+        else:
+            rec['matched_dish'] = None
+            
+    return recommendations
 
+### NEW FEATURE ###
 def get_recommendations(name):
     name_standardized = name.lower().strip()
     if name_standardized not in indices:
@@ -66,44 +89,66 @@ def get_recommendations(name):
     idx = indices[name_standardized]
     if isinstance(idx, pd.Series):
         idx = idx.iloc[0]
+        
     sim_scores = list(enumerate(cosine_sim[idx]))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
     sim_scores = sim_scores[1:11]
     restaurant_indices = [i[0] for i in sim_scores]
-    return df.iloc[restaurant_indices]
+    
+    recs_df = df.iloc[restaurant_indices]
+    recommendations = recs_df.to_dict('records')
 
-# 8. Web Routes
+    # Add reason
+    for rec in recommendations:
+        rec['reason'] = f"Similar to restaurants you like, such as '{name}'"
+        rec['matched_dish'] = None # No dish matching for this type of rec
+
+    return recommendations
+
+# 8. Web Routes (Updated)
 @app.route('/', methods=['GET', 'POST'])
-@login_required # Protects this page
+@login_required
 def home():
     recommendations = None
+    proactive_recs = None
     error = None
-    selected_restaurant = ""
 
     if df is None:
         error = "Recommendation engine is offline. Please check server data files."
         return render_template('index.html', error=error)
 
+    ### NEW FEATURE: PROACTIVE RECS on GET request ###
+    if request.method == 'GET' and 'history' in session and session['history']:
+        last_craving = session['history'][-1] # Get the last search
+        proactive_recs = get_recommendations_from_text(last_craving)
+        # Update reason for proactive recs
+        for rec in proactive_recs:
+             rec['reason'] = f"Because you recently searched for '{last_craving}'"
+
+
     if request.method == 'POST':
         restaurant_name = request.form.get('restaurant_name')
         taste_query = request.form.get('taste_query')
-        selected_restaurant = restaurant_name
 
         if taste_query:
-            recs_df = get_recommendations_from_text(taste_query)
-            if not recs_df.empty:
-                recommendations = recs_df.to_dict('records')
+            recommendations = get_recommendations_from_text(taste_query)
+            session.setdefault('history', []).append(taste_query) # Add to history
+            session.modified = True
         elif restaurant_name:
-            recs_df = get_recommendations(restaurant_name)
-            if recs_df is not None and not recs_df.empty:
-                recommendations = recs_df.to_dict('records')
+            recommendations = get_recommendations(restaurant_name)
+            # We can also add liked restaurants to history for more complex logic later
+            session.setdefault('history', []).append(restaurant_name)
+            session.modified = True
+            
+        if not recommendations:
+            error = "Could not find any recommendations. Please try a different query."
 
     return render_template(
         'index.html',
         recommendations=recommendations,
+        proactive_recs=proactive_recs,
         all_restaurants=all_restaurants_list,
-        error=error,
-        selected_restaurant=selected_restaurant
+        error=error
     )
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -137,17 +182,25 @@ def login():
             flash('Invalid username or password.', 'danger')
             return redirect(url_for('login'))
         login_user(user, remember=True)
+        
+        ### NEW FEATURE ###
+        # Initialize user's history on successful login
+        session['history'] = []
+
         return redirect(url_for('home'))
     return render_template('login.html')
 
 @app.route('/logout')
 @login_required
 def logout():
+    ### NEW FEATURE ###
+    # Clear history on logout
+    session.pop('history', None)
     logout_user()
     return redirect(url_for('login'))
 
 # 9. Main Execution Block
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all() # Creates tables if they don't already exist
+        db.create_all()
     app.run(debug=True)
