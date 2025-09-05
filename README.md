@@ -33,14 +33,3 @@ An intelligent food ordering and recommendation system built with Python, Flask,
 -   *Machine Learning:* Scikit-learn, Pandas, NumPy
 -   *Frontend:* HTML, CSS, Bootstrap 5, Jinja2
 
-
-# Setup and Installation
-
-Follow these steps to get the project running on your local machine.
-
-# 1. Prerequisites
-
--   Python 3.8+
--   MySQL Server and MySQL Workbench
--   Git
-
