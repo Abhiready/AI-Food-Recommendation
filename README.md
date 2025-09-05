@@ -16,13 +16,14 @@ An intelligent food ordering and recommendation system built with Python, Flask,
 # Screenshots
 
 *Login Page*
-<img width="2539" height="1466" alt="image" src="https://github.com/user-attachments/assets/05c3b59a-f22d-4d8c-838b-a21d4de7e1f2" />
+<img width="2829" height="1440" alt="image" src="https://github.com/user-attachments/assets/211079b2-629e-4ed5-8f02-290bee042550" />
 
 *Home page*
-<img width="2536" height="1465" alt="image" src="https://github.com/user-attachments/assets/19d1224e-f163-42a6-8e7c-da728d702499" />
+<img width="2655" height="1344" alt="image" src="https://github.com/user-attachments/assets/41272880-76d1-451e-b1c1-636e112de013" />
 
-*Recomendation part*
-<img width="2467" height="1190" alt="image" src="https://github.com/user-attachments/assets/a62ef419-4688-4db7-8a3d-5db1510b8fa2" />
+
+*Recommendation part*
+<img width="2748" height="1454" alt="image" src="https://github.com/user-attachments/assets/a8e4f396-5888-4a2a-aff2-848ae978ae00" />
 
 
 # Tech Stack
